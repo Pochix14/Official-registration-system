@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=
+comment0.target=PDF()
+comment0.text=\r\n\ Constructor\r\n
+comment1.params=tabla
+comment1.target=void\ crearReporte(javax.swing.JTable)
+comment1.text=\r\n\ Crear\ archivo\ de\ reporte\r\n
+comment2.params=documento\ tablaDatos
+comment2.target=void\ crearTabla(com.itextpdf.text.Document,\ javax.swing.JTable)
+comment2.text=\r\n\ Metodo\ que\ crea\ tabla\ con\ los\ datos\ de\ la\ base\ de\ datos\r\n
+comment3.params=documento
+comment3.target=void\ ponerTitulo(com.itextpdf.text.Document)
+comment3.text=\r\n\ Metodo\ para\ personalizar\ titulo\ del\ documento\r\n
+comment4.params=
+comment4.target=java.lang.String\ ruta()
+comment4.text=\r\n\ Devuelve\ ruta\ del\ archivo\r\n
+numComments=5

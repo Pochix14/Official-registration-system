@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Controlador()
+comment0.text=\r\n\ Constructor\r\n
+comment1.params=evento
+comment1.target=void\ changedUpdate(javax.swing.event.DocumentEvent)
+comment1.text=\r\n\ Eventos\ del\ document\ listener\r\n
+comment2.params=evento
+comment2.target=void\ insertUpdate(javax.swing.event.DocumentEvent)
+comment3.params=
+comment3.target=void\ asistente()
+comment4.params=
+comment4.target=void\ run()
+comment5.params=evento
+comment5.target=void\ removeUpdate(javax.swing.event.DocumentEvent)
+comment6.params=horas
+comment6.target=java.lang.String\ extras(java.lang.String[])
+comment6.text=\r\n\ Saca\ calculo\ de\ horas\ extra\r\n
+comment7.params=evento
+comment7.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment7.text=\r\n\ Eventos\ que\ desarrolla\ cada\ bot\u00F3n\r\n
+comment8.params=consulta
+comment8.target=void\ enviarConsulta(java.lang.String)
+comment8.text=\r\n\ Crear\ parametros\ para\ consulta\ al\ SQL\r\n
+numComments=9

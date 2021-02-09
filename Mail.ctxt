@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Mail()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ Mail\r\n
+comment1.params=
+comment1.target=javax.mail.PasswordAuthentication\ getPasswordAuthentication()
+comment2.params=destinatario
+comment2.target=boolean\ enviarMail(java.lang.String)
+comment2.text=\r\n\ Metodo\ de\ envio\ de\ correo\r\n
+numComments=3

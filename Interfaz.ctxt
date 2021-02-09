@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Interfaz()
+comment0.text=\r\n\ Constructor\ \r\n
+comment1.params=tf
+comment1.target=void\ visible(boolean)
+comment1.text=\r\n\ Mostrar\ ventana\r\n
+comment2.params=
+comment2.target=void\ crearPanelReporte()
+comment2.text=\r\n\ Crear\ panel\ para\ reportes\r\n
+comment3.params=control
+comment3.target=void\ activarListener(Controlador)
+comment3.text=\r\n\ Activar\ el\ listener\ para\ cada\ bot\u00F3n\r\n
+numComments=4

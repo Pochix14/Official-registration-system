@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.params=modelo\ c
+comment0.target=TablaDatos(javax.swing.table.DefaultTableModel,\ Controlador)
+comment0.text=\r\n\ Constructor\ \r\n
+comment1.params=c
+comment1.target=void\ activarListener(Controlador)
+comment1.text=\r\n\ Activa\ listener\ de\ botones\ de\ opciones\ de\ la\ tabla\ \r\n
+comment2.params=
+comment2.target=javax.swing.JTable\ tablaConsulta()
+comment2.text=\r\n\ Devuelve\ tabla\ con\ datos\ de\ la\ consulta\r\n
+numComments=3
