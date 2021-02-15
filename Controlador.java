@@ -254,34 +254,36 @@ public class Controlador implements ActionListener, DocumentListener
         
         if (evento.getSource() == interfaz.fecha) //Habilita o deshabilita los textfield's correspondientes y aumenta o disminuye el contador
         {
-            if (interfaz.fech.isEnabled())
+            if (interfaz.fechaReporte.isEnabled())
             {
-                interfaz.fech.setEnabled(false);
+                interfaz.fechaReporte.setEnabled(false);
                 interfaz.crearReporte.setEnabled(false);
                 --contador;
             }
             else
             {
-                interfaz.fech.setEnabled(true);
+                interfaz.fechaReporte.setEnabled(true);
                 interfaz.crearReporte.setEnabled(true);
-                interfaz.fech.requestFocusInWindow();
+                interfaz.fechaReporte.requestFocusInWindow();
                 ++contador;
             }
         }
         
         if (evento.getSource() == interfaz.rango) //Habilita o deshabilita los textfield's correspondientes y aumenta o disminuye el contador
         {
-            if (interfaz.rang.isEnabled())
+            if (interfaz.fechaRangoInicio.isEnabled() && interfaz.fechaRangoFin.isEnabled())
             {
-                interfaz.rang.setEnabled(false);
+                interfaz.fechaRangoInicio.setEnabled(false);
+                interfaz.fechaRangoFin.setEnabled(false);
                 interfaz.crearReporte.setEnabled(false);
                 --contador;
             }
             else
             {
-                interfaz.rang.setEnabled(true);
+                interfaz.fechaRangoInicio.setEnabled(true);
+                interfaz.fechaRangoFin.setEnabled(true);
                 interfaz.crearReporte.setEnabled(true);
-                interfaz.rang.requestFocusInWindow();
+                interfaz.fechaRangoInicio.requestFocusInWindow();
                 ++contador;
             }
         }        
@@ -337,14 +339,16 @@ public class Controlador implements ActionListener, DocumentListener
                 }
                 if (interfaz.fecha.isSelected())
                 {
-                    interfaz.fech.setText("");
+                    interfaz.fechaReporte.setCalendar(null);
                     interfaz.fech.setEnabled(false);
                     interfaz.fecha.setSelected(false);
                 }
                 if (interfaz.rango.isSelected())
                 {
-                    interfaz.rang.setText("");
-                    interfaz.rang.setEnabled(false);
+                    interfaz.fechaRangoInicio.setCalendar(null);
+                    interfaz.fechaRangoInicio.setEnabled(false);
+                    interfaz.fechaRangoFin.setCalendar(null);
+                    interfaz.fechaRangoFin.setEnabled(false);
                     interfaz.rango.setSelected(false);
                 }
             }
@@ -353,8 +357,8 @@ public class Controlador implements ActionListener, DocumentListener
         //Acciones de los botones de reportes
         if (evento.getSource() == interfaz.crearReporte) //Crea el reporte deseado, validando los campos que tengan informacion y creando la consulta
         {
-            String consulta = "select nombre, cedula, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
-            String finalConsulta = " order by dia;";
+            String consulta = "select horas.id, nombre, cedula, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
+            String finalConsulta = " order by id;";
             int ands = contador - 1;
             String and = " AND ";
             //Validar cada campo de datos
@@ -432,27 +436,135 @@ public class Controlador implements ActionListener, DocumentListener
                 }
             }
             
-            if (interfaz.fech.isEnabled())
+            if (interfaz.fechaReporte.isEnabled())
             {
-                //Preparar calendario
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                String fecha = formato.format(interfaz.fechaReporte.getDate());
+                String fr = "horas.dia = '" + fecha + "'";
+                if (ands == contador - 1 || ands == 0)
+                {
+                    consulta = consulta + fr;
+                }
+                else
+                {
+                    if (ands > 0)
+                    {
+                         consulta = consulta + and + fr;
+                         --ands;
+                    }                   
+                }
             }
             
-            if (interfaz.rang.isEnabled())
+            if (interfaz.fechaRangoInicio.isEnabled() && interfaz.fechaRangoFin.isEnabled())
             {
-                //Preparar calendarios de fechas
+                try
+                {
+                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                    String fi = formato.format(interfaz.fechaRangoInicio.getDate());
+                    String ff = formato.format(interfaz.fechaRangoFin.getDate());
+                    Date inicio = formato.parse(fi);
+                    Date fin = formato.parse(ff);
+                    //Obtiene dias entre rango de fecha
+                    int dias = (int) ((fin.getTime() - inicio.getTime()) / 86400000);
+                    String [] f = fi.split("/"); //Separa fecha inicial por los /
+                    String [] r = ff.split("/"); //Separa fecha final por los /
+                    
+                    //Primera linea de la consulta
+                    String rg = "horas.dia = '" + fi + "'";
+                    //Asignar dia, mes y ano inicial a int
+                    int diaI = Integer.parseInt(f[0]);
+                    ++diaI;
+                    int mesI = Integer.parseInt(f[1]);
+                    int anoI = Integer.parseInt(f[2]);
+                    //Asignar dia, mes y ano final a int
+                    int diaF = Integer.parseInt(r[0]);
+                    int mesF = Integer.parseInt(r[1]);
+                    int anoF = Integer.parseInt(r[2]);
+                    for (int i = dias; i > 0; --i)
+                    {
+                        String in = Integer.toString(diaI) + "/" + Integer.toString(mesI) + "/" + Integer.toString(anoI);
+                        String fn = Integer.toString(diaF+1) + "/" + Integer.toString(mesF) + "/" + Integer.toString(anoF);
+                        if (in != fn)
+                        {                         
+                            //Para cambio de mes Febrero
+                            if (mesI == 2 && diaI == 29)
+                            {
+                                ++mesI;
+                                diaI = 1;
+                            }
+                            else
+                            {
+                                //Para cambio de mes con 30 dias
+                                if (mesI == 4 || mesI==6 || mesI== 9 || mesI==11)
+                                {                                   
+                                    if (diaI == 31)
+                                    {
+                                        ++mesI ;
+                                        diaI = 1;
+                                    }
+                                }
+                                else
+                                {
+                                    //Para cambio de mes con 31 dias
+                                    if (mesI == 1 || mesI == 3 || mesI== 5 || mesI== 7 || mesI == 8 || mesI == 10 || mesI ==12)
+                                    {
+                                        if (diaI == 32)
+                                        {
+                                           ++mesI;
+                                           if (mesI == 13)
+                                           {
+                                               mesI = 1;
+                                               ++anoI;
+                                            }
+                                            diaI = 1; 
+                                        }                                        
+                                    }
+                                }
+                            }
+                            //Si mes es menor de 10, pone 0 adelante
+                            if (mesI < 10)
+                            {
+                                rg = rg + " or horas.dia = '" + diaI + "/0" + mesI + "/" + anoI + "'";
+                            }
+                            else
+                            {
+                                rg = rg + " or horas.dia = '" + diaI + "/" + mesI + "/" + anoI + "'";
+                            }
+                            ++diaI;
+                        }
+                    }
+                    if (ands == contador - 1 || ands == 0)
+                    {
+                        consulta = consulta + rg;
+                    }
+                    else
+                    {
+                        if (ands > 0)
+                        {
+                            consulta = consulta + and + rg;
+                            --ands;
+                        }                   
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
             
             //Construccion de consulta final
             consulta = consulta + finalConsulta;
             this.enviarConsulta(consulta);
+            interfaz.limpiarCampos();
         }
         
         if (evento.getSource() == interfaz.reporteCompleto) //Genera reporte completo 
         {
-            String consulta = "select nombre, cedula, ac, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario order by dia;";
+            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario order by id;";
             this.enviarConsulta(consulta);
             interfaz.completo.setSelected(false);
             interfaz.reporteCompleto.setEnabled(false);
+            interfaz.limpiarCampos();
         }
     }
     

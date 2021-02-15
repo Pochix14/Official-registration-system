@@ -5,6 +5,8 @@ import java.util.*;
 import java.awt.event.*;
 import javax.swing.text.*;
 
+import java.text.SimpleDateFormat;
+
 /**
  * @author Pablo Rodríguez 
  * @version 20.11.2020
@@ -13,15 +15,15 @@ public class Interfaz extends JFrame
 {
     //Variables de menu
     private JMenuBar menu;
-    private JMenu opciones, ayuda;
-    private JMenuItem reg, rep, insReg, insRep, creditos;
+    private JMenu ayuda;
+    private JMenuItem insReg, insRep, creditos;
     
     //Paneles
     private JPanel registro, reporte, rep1, rep2, rep3, rep4;
     
     //Etiquetas
     private JLabel etqReg, etqRep, logo;
-    private JLabel etqFun, etqCed, etqDep, etqFecha, etqRango, etqAC;
+    private JLabel etqFun, etqCed, etqDep, etqFecha, etqRangoI, etqRangoF, etqAC;
     
     //Tabulador de pestanas
     private JTabbedPane pestanas;
@@ -47,6 +49,11 @@ public class Interfaz extends JFrame
     //Botones
     public JButton crearReporte, reporteCompleto;
     
+    //Selector de fechas
+    public com.toedter.calendar.JDateChooser fechaReporte;
+    public com.toedter.calendar.JDateChooser fechaRangoInicio;
+    public com.toedter.calendar.JDateChooser fechaRangoFin;
+    
     /**
      * Constructor 
      */
@@ -65,7 +72,7 @@ public class Interfaz extends JFrame
         logo.setMaximumSize(new Dimension(150, 150));
         ImageIcon icono = new ImageIcon("logo.jpg");
         fondo = icono.getImage();
-        fondo = fondo.getScaledInstance(600, 490, java.awt.Image.SCALE_SMOOTH);
+        fondo = fondo.getScaledInstance(600, 540, java.awt.Image.SCALE_SMOOTH);
         logo.setIcon(new ImageIcon(fondo));
         registro.add(logo);
         
@@ -78,32 +85,26 @@ public class Interfaz extends JFrame
         
         //Configuracion de barra de menu
         menu = new JMenuBar();
-        opciones = new JMenu("Opciones");
         ayuda = new JMenu("Ayuda");
-        reg = new JMenuItem("Registro");
-        rep = new JMenuItem("Reporte");
         insReg = new JMenuItem("Ayuda Registro");
         insRep = new JMenuItem("Ayuda Reporte");
         creditos = new JMenuItem("Créditos");
-        opciones.add(reg);
-        opciones.add(rep);
         ayuda.add(insReg);
         ayuda.add(insRep);
         ayuda.add(creditos);
-        menu.add(opciones);
         menu.add(ayuda);
         
         //Configuracion para ventana principal
         this.setLayout(new FlowLayout());        
         this.setTitle(titulo);
         this.setJMenuBar(menu);
-        this.setSize(610, 610);
-        this.setMinimumSize(new Dimension(615, 615));
+        this.setSize(610, 650);
+        this.setMinimumSize(new Dimension(615, 655));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);        
         this.setResizable(false);
         pestanas = new JTabbedPane();
-        pestanas.setPreferredSize(new Dimension (600, 600));
+        pestanas.setPreferredSize(new Dimension (600, 630));
         pestanas.add("Registro", registro);
         pestanas.add("Reporte", reporte);
         this.add(pestanas);        
@@ -132,7 +133,7 @@ public class Interfaz extends JFrame
         rep4.setBorder(BorderFactory.createTitledBorder("INSTRUCCIONES REPORTE"));
         String i = "1- Seleccione una o varias casillas para personalizar el reporte o bien, seleccione reporte completo.\n";
         String ii = "2- Llene los datos correspondientes a la(s) casilla(s) que selecciono.\n";
-        String iii = "3- Una vez lleno los datos, presione el boton de 'Crear Reporte'.\n ";
+        String iii = "3- Una vez lleno los datos, presione el boton de 'Crear Reporte'.\n\n ";
         JLabel i1 = new JLabel(i);
         JLabel i2 = new JLabel(ii);
         JLabel i3 = new JLabel(iii);
@@ -209,12 +210,16 @@ public class Interfaz extends JFrame
         ac.addItem("ACG");
         ac.addItem("ACTo");
         ac.setEnabled(false);
+        //Fechas
         etqFecha = new JLabel("Fecha: ");
-        fech = new JTextField(20);
-        fech.setEnabled(false);
-        etqRango = new JLabel("Rango Fechas: ");
-        rang = new JTextField(20);
-        rang.setEnabled(false);
+        fechaReporte = new com.toedter.calendar.JDateChooser(); 
+        fechaReporte.setEnabled(false);
+        etqRangoI = new JLabel("Fecha Inicio: ");
+        fechaRangoInicio = new com.toedter.calendar.JDateChooser(); 
+        etqRangoF = new JLabel("Fecha Fin: ");
+        fechaRangoFin = new com.toedter.calendar.JDateChooser();
+        fechaRangoInicio.setEnabled(false);
+        fechaRangoFin.setEnabled(false);
         rep2 = new JPanel();
         rep2.setAlignmentX(Component.LEFT_ALIGNMENT);
         rep2.setBorder(BorderFactory.createTitledBorder("Datos busqueda"));        
@@ -230,14 +235,16 @@ public class Interfaz extends JFrame
                 .addComponent(etqDep)
                 .addComponent(etqAC)
                 .addComponent(etqFecha)
-                .addComponent(etqRango))
+                .addComponent(etqRangoI)
+                .addComponent(etqRangoF))
             .addGroup(layoutInferior.createParallelGroup(GroupLayout.Alignment.LEADING) //Columna de campos
                 .addComponent(funcionario)
                 .addComponent(ced)
                 .addComponent(dep)
                 .addComponent(ac)
-                .addComponent(fech)
-                .addComponent(rang)));      
+                .addComponent(fechaReporte)
+                .addComponent(fechaRangoInicio)
+                .addComponent(fechaRangoFin)));      
         
         layoutInferior.setVerticalGroup(layoutInferior.createSequentialGroup() //Filas de campos
             .addGroup(layoutInferior.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -254,10 +261,13 @@ public class Interfaz extends JFrame
                 .addComponent(ac))
             .addGroup(layoutInferior.createParallelGroup(GroupLayout.Alignment.BASELINE)
                 .addComponent(etqFecha)
-                .addComponent(fech))
+                .addComponent(fechaReporte))
             .addGroup(layoutInferior.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                .addComponent(etqRango)
-                .addComponent(rang))); 
+                .addComponent(etqRangoI)
+                .addComponent(fechaRangoInicio))
+            .addGroup(layoutInferior.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(etqRangoF)
+                .addComponent(fechaRangoFin))); 
         reporte.add(rep2);
         
         //Panel de botones
@@ -280,8 +290,6 @@ public class Interfaz extends JFrame
     public void activarListener (Controlador control)
     {
         //Botones de la barra de menú
-        reg.addActionListener(control);
-        rep.addActionListener(control);
         insReg.addActionListener(control);
         insRep.addActionListener(control);
         creditos.addActionListener(control);
@@ -304,4 +312,56 @@ public class Interfaz extends JFrame
         doc.addDocumentListener(control);    //Doc listener para que verifique cada vez que se ingresar un caracter en el campo codigo
         codigo.requestFocusInWindow();
     }
+    
+    /**
+     * Limpiar campos reporte
+     */
+    public void limpiarCampos ()
+    {
+        //Checkbox
+        nombre.setSelected(false);
+        cedula.setSelected(false);
+        departamento.setSelected(false);
+        acon.setSelected(false);
+        fecha.setSelected(false);
+        rango.setSelected(false);
+        completo.setSelected(false);
+        
+        //TextField
+        funcionario.setText("");
+        funcionario.setEnabled(false);
+        ced.setText("");
+        ced.setEnabled(false);
+        
+        //Listas
+        dep.setEnabled(false);
+        ac.setEnabled(false);
+        
+        //Fechas
+        fechaReporte.setEnabled(false);
+        fechaRangoInicio.setEnabled(false);
+        fechaRangoFin.setEnabled(false);
+        ((JTextField)fechaReporte.getDateEditor().getUiComponent()).setText("");
+        ((JTextField)fechaRangoInicio.getDateEditor().getUiComponent()).setText("");
+        ((JTextField)fechaRangoFin.getDateEditor().getUiComponent()).setText("");
+        fechaReporte.setDate(null);
+        
+        //Boton de reporte
+        crearReporte.setEnabled(false);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
