@@ -108,14 +108,14 @@ public class PDF
         for (int i = 0; i < tablaDatos.getRowCount(); ++i)
         {
             tabla.addCell(new Phrase(Integer.toString (i + 1), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
-            tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 0).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 1).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 2).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 3).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 4).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 5).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 6).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
-            tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 7).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));                                
+            tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 7).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+            tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 8).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));                                
         }
         
         documento.add(tabla);

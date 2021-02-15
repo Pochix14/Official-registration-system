@@ -357,7 +357,7 @@ public class Controlador implements ActionListener, DocumentListener
         //Acciones de los botones de reportes
         if (evento.getSource() == interfaz.crearReporte) //Crea el reporte deseado, validando los campos que tengan informacion y creando la consulta
         {
-            String consulta = "select horas.id, nombre, cedula, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
+            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
             String finalConsulta = " order by id;";
             int ands = contador - 1;
             String and = " AND ";

@@ -31,8 +31,9 @@ public class Mail
      */
     public Mail()
     {
-       usuario = "docs.sinac@gmail.com";
-       password =  "S0port3*";
+       //Si es un correo de Gmail, hay que activar la opción de aplicaciones poco seguras
+        usuario = "your_email";
+       password =  "your_password";
        
        //Propiedades de servidor
        Properties props = new Properties();
