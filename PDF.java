@@ -54,8 +54,9 @@ public class PDF
      */
     public static void crearTabla (Document documento, JTable tablaDatos) throws DocumentException
     {
-        PdfPTable tabla = new PdfPTable(9); //Crear tabla cantidad de filas 
-        tabla.setWidths(new float [] {1f, 9f, 4f, 5.5f, 6f, 3.8f, 4.2f, 4.2f, 3.5f}); //Tamano de cada fila
+        PdfPTable tabla = new PdfPTable(11); //Crear tabla cantidad de columnas 
+        tabla.setWidths(new float [] {35, 250, 85, 120, 130, 90, 100, 100, 95, 85, 75}); //Tamano de cada columna
+        tabla.setWidthPercentage(100);
 
         //Celda de numero
         PdfPCell celda = new PdfPCell(new Phrase("N°"));
@@ -97,8 +98,18 @@ public class PDF
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
+        //Tiempo Laborado
+        celda = new PdfPCell(new Phrase("Tiempo Laborado"));
+        celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(celda);
+        
         //Tiempo Extra
         celda = new PdfPCell(new Phrase("Tiempo Extra"));
+        celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+        tabla.addCell(celda);
+        
+        //Llegada tardia
+        celda = new PdfPCell(new Phrase("Tardia"));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
@@ -116,6 +127,8 @@ public class PDF
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 6).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 7).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
             tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 8).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));                                
+            tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 9).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
+            tabla.addCell(new Phrase(tablaDatos.getValueAt(i, 10).toString(), FontFactory.getFont(FontFactory.TIMES_ROMAN, 10)));
         }
         
         documento.add(tabla);

@@ -34,7 +34,7 @@ public class BaseDatos
         try
         {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Trae libreria de SQL Server
-            String URL = "jdbc:sqlserver://your-server\\SQLEXPRESS:1433;databaseName=YOUR-DATABASE;user=YOUR-USER;password=YOUR-PASSWORD;"; //Ruta para conexion
+            String URL = "jdbc:sqlserver://PABLO-KCT\\SQLEXPRESS:1433;databaseName=prueba;user=admin;password=Pabloc14$;"; //Ruta para conexion
             conexion = DriverManager.getConnection(URL); //Abre conexion
             estado = true;
         }
@@ -130,6 +130,29 @@ public class BaseDatos
     }
     
     /**
+     * Obtiene hora oficial de entrada del funcionario
+     */
+    public String horaOficial (String funcionario)
+    {
+        String ho = "";
+        try
+        {
+            String consulta = "select entradaOficial from funcionario where cedula = '" + funcionario + "';";
+            Statement stmt = conexion.createStatement();
+            ResultSet r = stmt.executeQuery(consulta);
+            if (r.next())
+            {
+                ho = r.getString(1);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return ho;
+    }
+    
+    /**
      * Metodo que anade las columnas con los datos de la consulta
      */
     private void meterDatos (ResultSet resultado)
@@ -182,13 +205,13 @@ public class BaseDatos
     /**
      * Anade marcas
      */
-    public void anadirMarca (String entradaSalida, String funcionario, String dia, String hora)
+    public void anadirMarca (String entradaSalida, String funcionario, String dia, String hora, String tardia)
     {
         if (entradaSalida == "entrada") //Valida si es de entrada o salida
         {
             try
             {
-                String marcaEntrada = "insert into horas (funcionario, dia, entrada, salida, tiempoExtra) values ('" + funcionario + "', '" + dia + "', '" + hora + "', '" + hora + "' , '0');"; //Codigo para insertar nueva fila
+                String marcaEntrada = "insert into horas (funcionario, dia, entrada, salida, tiempoLaborado, tiempoExtra, tardia) values ('" + funcionario + "', '" + dia + "', '" + hora + "', '" + hora + "' , '0' , '0', '" + tardia + "');"; //Codigo para insertar nueva fila
                 Statement stmt = conexion.createStatement();
                 stmt.executeUpdate(marcaEntrada);
             }
@@ -362,14 +385,21 @@ public class BaseDatos
     }
     
     /**
-     * Anade el tiempo extra
+     * Anade el tiempo extra y laborado
      */
-    public void tiempoExtra (String extras, String funcionario, String dia)
+    public void tiempo (String tiempos, String funcionario, String dia)
     {
         try
         {
-            String te = "update horas set tiempoExtra = '" + extras + "' where funcionario = '" + funcionario + "' and dia = '" + dia + "';"; //Codigo para anadir el tiempo extra
+            String [] resultado = tiempos.split("/"); //Separa el string recibido en tiempo laborado y extra
+            
+            //Sentencia para actualizar tiempo laborado
+            String tl = "update horas set tiempoLaborado = '" + resultado[0] + "' where funcionario = '" + funcionario + "' and dia = '" + dia + "';";
             Statement stmt = conexion.createStatement();
+            stmt.executeUpdate(tl);
+            
+            //Sentencia para actualizar tiempo extra
+            String te = "update horas set tiempoExtra = '" + resultado[1] + "' where funcionario = '" + funcionario + "' and dia = '" + dia + "';";
             stmt.executeUpdate(te);
         }
         catch (Exception e)

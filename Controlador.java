@@ -77,7 +77,7 @@ public class Controlador implements ActionListener, DocumentListener
                 if (baseDatos.consultarExiste(interfaz.codigo.getText(), fecha[0]) == false) //Pregunta si existe el registro, si NO existe hace lo siguiente
                 {
                     marca = "entrada";
-                    baseDatos.anadirMarca(marca, interfaz.codigo.getText(), fecha[0], fecha[1] + " " + fecha[2]); //Anade marca con datos adquiridos
+                    baseDatos.anadirMarca(marca, interfaz.codigo.getText(), fecha[0], fecha[1] + " " + fecha[2], this.tardia(fecha[1] + " " + fecha[2], baseDatos.horaOficial(interfaz.codigo.getText()))); //Anade marca con datos adquiridos
                     iSimple.marcaRegistrada(marca, baseDatos.obtenerNombre(interfaz.codigo.getText())); //Lanza mensaje de marca
                     this.asistente(); //Limpia campos
                     numeroCaracteres = 0;
@@ -85,8 +85,8 @@ public class Controlador implements ActionListener, DocumentListener
                 else //Si ya existe marca, procede a marcar la salida
                 {
                     marca = "salida";
-                    baseDatos.anadirMarca(marca, interfaz.codigo.getText(), fecha[0], fecha[1] + " " + fecha[2]); //Marca la salida
-                    baseDatos.tiempoExtra(this.extras(baseDatos.obtenerHoras(interfaz.codigo.getText(), fecha[0])), interfaz.codigo.getText(), fecha[0]);  //Verifica si hay tiempo extra para marcar
+                    baseDatos.anadirMarca(marca, interfaz.codigo.getText(), fecha[0], fecha[1] + " " + fecha[2], ""); //Marca la salida
+                    baseDatos.tiempo(this.tiempo(baseDatos.obtenerHoras(interfaz.codigo.getText(), fecha[0])), interfaz.codigo.getText(), fecha[0]);  //Verifica si hay tiempo extra para marcar
                     iSimple.marcaRegistrada(marca, baseDatos.obtenerNombre(interfaz.codigo.getText())); //Mensaje de marca registrada
                     this.asistente(); //limpia campos
                     numeroCaracteres = 0;
@@ -116,16 +116,161 @@ public class Controlador implements ActionListener, DocumentListener
     }
     
     /**
-     * Saca calculo de horas extra
+     * Saca calculo de llegadas tardias
      */
-    private String extras (String[] horas)
+    private String tardia (String horaEntrada, String horaOficial)
     {
-        String extras = "0";        
+        String tardia = "NO";        
         try
         {
             SimpleDateFormat formato = new SimpleDateFormat("hh:mm:ss"); //Formato que se le da al string que recibe de la DB
-            Date entrada = formato.parse(horas[0]);
-            Date salida = formato.parse(horas[1]);
+            SimpleDateFormat formato2 = new SimpleDateFormat("hh:mm:ss aa");//Formato para sacar 12 MD
+            Date entradaRegistrada;
+            Date entradaOficial;
+            //Determina si la hora es 12MD para asignar correctamente en la entrada
+            System.out.println(horaEntrada);
+            if (horaEntrada.contains("PM"))
+            {
+                String hora = horaEntrada.substring(0, horaEntrada.indexOf(":")); //Obtiene la hora
+                horaEntrada = horaEntrada.substring(2, horaEntrada.length());
+                System.out.println(horaEntrada);
+                //Si la hora es PM, la cambia a formato militar
+                switch (hora)
+                {
+                    case "01": 
+                                hora = "13";
+                    break;
+                        
+                    case "02": 
+                                hora = "14";
+                    break;
+                        
+                    case "03": 
+                                hora = "15";
+                    break;
+                        
+                    case "04": 
+                                hora = "16";
+                    break;
+                        
+                    case "05": 
+                                hora = "17";
+                    break;
+                        
+                    case "06": 
+                                hora = "18";
+                    break;
+                        
+                    case "07": 
+                                hora = "19";
+                    break;
+                        
+                    case "08": 
+                                hora = "20";
+                    break;
+                        
+                    case "09": 
+                                hora = "21";
+                    break;
+                        
+                    case "10": 
+                                hora = "22";
+                    break;
+                        
+                    case "11": 
+                                hora = "23";
+                    break;
+                }
+                horaEntrada = hora + horaEntrada;
+                System.out.println(horaEntrada);
+                //Si son las 12 MD cambiar el formato
+                if (hora == "12")
+                {
+                    entradaRegistrada = formato2.parse(horaEntrada); //Si contiene las 12
+                    entradaOficial = formato2.parse(horaOficial);
+                }
+                else
+                {
+                    entradaRegistrada = formato.parse(horaEntrada); //Si es cualquier otra hora
+                    entradaOficial = formato.parse(horaOficial);
+                }
+            }
+            else
+            {
+                entradaRegistrada = formato.parse(horaEntrada);
+                entradaOficial = formato.parse(horaOficial);
+            }
+            System.out.println(entradaRegistrada);
+            System.out.println(entradaOficial);
+            //Diferencia entre las horas
+            long dif = entradaRegistrada.getTime() - entradaOficial.getTime();
+            //Sacar los minutos de diferencia
+            long min = (dif / (1000 * 60)) % 60;
+            //Obtenemos las horas de diferencia
+            long hrs = (dif / (1000 * 60 * 60)) % 24;
+            
+            //Valida si existe llegada tardia y la marca
+            if (min > 5 || hrs > 0)
+            {
+                tardia = Long.toString(hrs) + " horas y " + Long.toString(min) + " minutos";
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }       
+        
+        return tardia;
+    }
+    
+    /**
+     * Saca calculo de horas extra
+     */
+    private String tiempo (String[] horas)
+    {
+        String tiempo = ""; //String que devuelve
+        String extras = "0";  //Para tiempo extra
+        String laborado = "0"; //Para tiempo laborado
+        try
+        {
+            SimpleDateFormat formato = new SimpleDateFormat("hh:mm:ss"); //Formato que se le da al string que recibe de la DB
+            SimpleDateFormat formato2 = new SimpleDateFormat("hh:mm:ss aa");//Formato para sacar 12 MD
+            Date entrada;
+            Date salida;
+            //Determina si la hora es 12MD para asignar correctamente en la entrada
+            if (horas[0].contains("PM"))
+            {
+                String hora = horas[0].substring(0, horas[0].indexOf(":")); //Obtiene la hora
+                if (hora == "12")
+                {
+                    entrada = formato2.parse(horas[0]); //Si contiene las 12
+                }
+                else
+                {
+                    entrada = formato.parse(horas[0]); //Si es cualquier otra hora
+                }
+            }
+            else
+            {
+                entrada = formato.parse(horas[0]);
+            }
+            //Determina si la hora es 12 MD para asignar correctamente en la salida
+            if (horas[1].contains("PM"))
+            {
+                String hora = horas[1].substring(0, horas[1].indexOf(":")); //Obtiene la hora
+                if (hora == "12")
+                {
+                    salida = formato2.parse(horas[1]); //Si contiene las 12
+                }
+                else
+                {
+                    salida = formato.parse(horas[1]); //Si no contiene las 12
+                }
+            }
+            else
+            {
+                salida = formato.parse(horas[1]);
+            }
             //Diferencia entre las horas
             long dif = salida.getTime() - entrada.getTime();
             //Sacar los minutos de diferencia
@@ -133,8 +278,10 @@ public class Controlador implements ActionListener, DocumentListener
             //Obtenemos las horas de diferencia
             long hrs = (dif / (1000 * 60 * 60)) % 24;
             
-            //Valida si existe tiempo extra y lo marca
-            if (min > 0 || hrs > 0)
+            //Calcula el tiempo laborado
+            laborado = Long.toString(hrs) + " horas y " + Long.toString(min) + " minutos"; 
+            
+            //Valida si existe tiempo extra y lo marca            
             {
                 if (hrs >= 8) //Si hay tiempo extra, lo asigna con horas y minutos
                 {
@@ -152,7 +299,10 @@ public class Controlador implements ActionListener, DocumentListener
         {
             e.printStackTrace();
         }        
-        return extras;
+        
+        tiempo = laborado + "/" + extras; //Se usa / para separar los tiempos
+        
+        return tiempo;
     }
     
     /**
@@ -357,7 +507,7 @@ public class Controlador implements ActionListener, DocumentListener
         //Acciones de los botones de reportes
         if (evento.getSource() == interfaz.crearReporte) //Crea el reporte deseado, validando los campos que tengan informacion y creando la consulta
         {
-            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
+            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoLaborado, tiempoExtra, tardia from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
             String finalConsulta = " order by id;";
             int ands = contador - 1;
             String and = " AND ";
@@ -560,7 +710,7 @@ public class Controlador implements ActionListener, DocumentListener
         
         if (evento.getSource() == interfaz.reporteCompleto) //Genera reporte completo 
         {
-            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoExtra from funcionario inner join horas on funcionario.cedula = horas.funcionario order by id;";
+            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoLaborado, tiempoExtra, tardia from funcionario inner join horas on funcionario.cedula = horas.funcionario order by id;";
             this.enviarConsulta(consulta);
             interfaz.completo.setSelected(false);
             interfaz.reporteCompleto.setEnabled(false);

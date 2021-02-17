@@ -38,7 +38,7 @@ public class TablaDatos
         tabla.setModel(modelo);
         scroll = new JScrollPane(tabla);
         ventana.getContentPane().add(scroll);
-        ventana.setMinimumSize(new Dimension(900,500));
+        ventana.setMinimumSize(new Dimension(1280,720));
         ventana.setJMenuBar(menu);
         ventana.setLocationRelativeTo(null);
         ventana.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

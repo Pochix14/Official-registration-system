@@ -1,8 +1,3 @@
-import java.io.*;
-import javax.print.attribute.*;
-import javax.print.*;
-import javax.print.event.*;
-
 import java.awt.print.*;
 import com.spire.pdf.*;
 
@@ -33,8 +28,8 @@ public class Print
         Paper papel = formatoPagina.getPaper();
 
         //Remueve los margenes por default y pone orientacion horizontal
-        //papel.setSize(8.5, 11);
-        papel.setImageableArea(formatoPagina.getImageableX(), formatoPagina.getImageableY(), formatoPagina.getWidth()+1, formatoPagina.getHeight());
+        //papel.setSize(8.5d, 11d);
+        papel.setImageableArea(formatoPagina.getImageableX(), formatoPagina.getImageableY(), formatoPagina.getWidth(), formatoPagina.getHeight());
         formatoPagina.setOrientation(PageFormat.LANDSCAPE);
         
         //Cargando papel al formato y asignando el documento a imprimir con el formato dado
