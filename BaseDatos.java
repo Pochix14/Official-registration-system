@@ -89,6 +89,61 @@ public class BaseDatos
     }
     
     /**
+     * Query para agregar / eliminar / actualizar
+     */
+    public void query (String consulta, int tipo)
+    {
+        try
+        {
+            if (tipo == 10) //Si es 10, es actulizacion
+            {
+                PreparedStatement stmt;
+                stmt = conexion.prepareStatement(consulta);
+                stmt.executeUpdate();
+            }
+            else
+            {
+                Statement stmt = conexion.createStatement();
+                stmt.executeUpdate(consulta);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Consulta de datos funcionario
+     */
+    public String [] consultarF (String funcionario)
+    {
+        String [] datos = new String [6];
+        try
+        {
+            String consulta = "select * from funcionario where cedula = '" + funcionario + "';";
+            Statement stmt = conexion.createStatement();
+            ResultSet r = stmt.executeQuery(consulta);
+            //Codigo que devuelve el resultado del select *
+            if (r.next())
+            {
+                datos[0] = r.getString(1); //Cedula
+                datos[1] = r.getString(2); //ID
+                datos[2] = r.getString(3); //Nombre
+                datos[3] = r.getString(4); //Departamento
+                datos[4] = r.getString(5); //AC
+                datos[5] = r.getString(6); //Hora entrada
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return datos;
+    }
+    
+    /**
      * Metodo que agarra los datos de la consulta y crea las columnas
      */
     private void configurarColumnas (ResultSet resultado)

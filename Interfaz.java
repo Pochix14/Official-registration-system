@@ -15,8 +15,8 @@ public class Interfaz extends JFrame
 {
     //Variables de menu
     private JMenuBar menu;
-    private JMenu ayuda;
-    private JMenuItem insReg, insRep, creditos;
+    private JMenu ayuda, usuarios;
+    private JMenuItem insReg, insRep, creditos, agUser, edUser, elUser ;
     
     //Paneles
     private JPanel registro, reporte, rep1, rep2, rep3, rep4;
@@ -85,6 +85,13 @@ public class Interfaz extends JFrame
         
         //Configuracion de barra de menu
         menu = new JMenuBar();
+        usuarios = new JMenu("Usuarios");
+        agUser = new JMenuItem("Agregar Usuario");
+        edUser = new JMenuItem("Editar Usuario");
+        elUser = new JMenuItem("Eliminar Usuario");
+        usuarios.add(agUser);
+        usuarios.add(edUser);
+        usuarios.add(elUser);
         ayuda = new JMenu("Ayuda");
         insReg = new JMenuItem("Ayuda Registro");
         insRep = new JMenuItem("Ayuda Reporte");
@@ -92,6 +99,7 @@ public class Interfaz extends JFrame
         ayuda.add(insReg);
         ayuda.add(insRep);
         ayuda.add(creditos);
+        menu.add(usuarios);
         menu.add(ayuda);
         
         //Configuracion para ventana principal
@@ -293,6 +301,9 @@ public class Interfaz extends JFrame
         insReg.addActionListener(control);
         insRep.addActionListener(control);
         creditos.addActionListener(control);
+        agUser.addActionListener(control);
+        edUser.addActionListener(control);
+        elUser.addActionListener(control);
         
         //Checkbox
         nombre.addActionListener(control);
@@ -350,18 +361,3 @@ public class Interfaz extends JFrame
         crearReporte.setEnabled(false);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

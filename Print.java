@@ -29,7 +29,7 @@ public class Print
 
         //Remueve los margenes por default y pone orientacion horizontal
         //papel.setSize(8.5d, 11d);
-        papel.setImageableArea(formatoPagina.getImageableX(), formatoPagina.getImageableY(), formatoPagina.getWidth(), formatoPagina.getHeight());
+        papel.setImageableArea(0, 0, formatoPagina.getWidth(), formatoPagina.getHeight());
         formatoPagina.setOrientation(PageFormat.LANDSCAPE);
         
         //Cargando papel al formato y asignando el documento a imprimir con el formato dado

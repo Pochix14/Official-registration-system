@@ -98,6 +98,21 @@ public class InterfazSimple extends JOptionPane
     }
     
     /**
+     * Solicita cedula para editar usuario
+     */
+    public String pedirCedula ()
+    {
+        String mensaje = "Digite la cedula del funcionario a editar: ";
+        String a = this.showInputDialog(mensaje);
+        if (a == null || a == "")
+        {
+            a = "";
+        }
+        
+        return a;
+    }    
+    
+    /**
      * Mensaje generado cuando se hizo el envio del correo
      */
     public void correoEnviado ()
@@ -139,14 +154,53 @@ public class InterfazSimple extends JOptionPane
         String mensaje = "";
         if (entradaSalida == "entrada")
         {
-            mensaje = "Marca de entrada registrada exitosamente!\n\nBuen dia! " + nombre;
+            mensaje = "Marca de entrada registrada exitosamente!\n\nBuen dia! \n" + nombre;
         }
         else
         {
-            mensaje = "Marca de salida registrada exitosamente!\n\nBuena tarde! "+ nombre;
+            mensaje = "Marca de salida registrada exitosamente!\n\nBuena tarde! \n"+ nombre;
         }
         JOptionPane p = new JOptionPane(mensaje, this.INFORMATION_MESSAGE);
         JDialog dialogo = p.createDialog("Marca registrada!");
+        
+        //Timer para que se autocierre
+        java.util.Timer timer = new java.util.Timer();
+        timer.schedule(new TimerTask ()
+            {
+                public void run ()
+                {
+                    dialogo.dispose();
+                }
+            }, 3000); //Cierre automatico en 3 segundos
+        
+        dialogo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialogo.setAlwaysOnTop(true);
+        dialogo.setModal(false);
+        dialogo.setVisible(true);
+    }
+    
+    /**
+     * Mensaje de agregar / actualizar / eliminar correctamente
+     */
+    public void usuario (int tipo)
+    {
+        String mensaje = "";
+        switch (tipo)
+        {
+            case 1: //Agregar
+                mensaje = "Usuario registrado correctamente!";
+            break;
+            
+            case 2: //Actualizar
+                mensaje = "Usuario actulizado correctamente!";
+            break;
+            
+            case 3: //Eliminar
+                mensaje = "Usuario eliminado correctamente!";
+            break;
+        }
+        JOptionPane p = new JOptionPane(mensaje, this.INFORMATION_MESSAGE);
+        JDialog dialogo = p.createDialog("Gestion de usuarios!");
         
         //Timer para que se autocierre
         java.util.Timer timer = new java.util.Timer();

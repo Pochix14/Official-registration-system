@@ -13,6 +13,7 @@ import com.itextpdf.text.*;
 
 import javax.swing.*;
 import java.io.File;
+import java.awt.*;
 
 /**
  * @author Pablo Rodriguez
@@ -59,57 +60,58 @@ public class PDF
         tabla.setWidthPercentage(100);
 
         //Celda de numero
-        PdfPCell celda = new PdfPCell(new Phrase("N°"));
+        PdfPCell celda = new PdfPCell(new Phrase("N°", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Columna Nombre
-        celda = new PdfPCell(new Phrase("Nombre"));
+        
+        celda = new PdfPCell(new Phrase("Nombre", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Celda Cedula
-        celda = new PdfPCell(new Phrase("Cedula"));
+        celda = new PdfPCell(new Phrase("Cédula", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Celda AC
-        celda = new PdfPCell(new Phrase("Area Conservacion"));
+        celda = new PdfPCell(new Phrase("Área Conservación", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Celda Departamento
-        celda = new PdfPCell(new Phrase("Departamento"));
+        celda = new PdfPCell(new Phrase("Departamento", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Dia
-        celda = new PdfPCell(new Phrase("Fecha"));
+        celda = new PdfPCell(new Phrase("Fecha", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Hora Entrada
-        celda = new PdfPCell(new Phrase("Entrada"));
+        celda = new PdfPCell(new Phrase("Entrada", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Hora Salida
-        celda = new PdfPCell(new Phrase("Salida"));
+        celda = new PdfPCell(new Phrase("Salida", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Tiempo Laborado
-        celda = new PdfPCell(new Phrase("Tiempo Laborado"));
+        celda = new PdfPCell(new Phrase("Tiempo Laborado", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Tiempo Extra
-        celda = new PdfPCell(new Phrase("Tiempo Extra"));
+        celda = new PdfPCell(new Phrase("Tiempo Extra", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         
         //Llegada tardia
-        celda = new PdfPCell(new Phrase("Tardia"));
+        celda = new PdfPCell(new Phrase("Tardía", FontFactory.getFont("Arial", 11, Font.BOLD)));
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
         tabla.addCell(celda);
         

@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.params=control
+comment0.target=Usuario(Controlador)
+comment0.text=\r\n\ Constructor\ \r\n
+comment1.params=tf
+comment1.target=void\ visible(boolean)
+comment1.text=\r\n\ Hacer\ visible\ o\ no\r\n
+comment2.params=
+comment2.target=void\ crearPanel()
+comment2.text=\r\n\ Creacion\ de\ panel\ tipo\ form\r\n
+comment3.params=
+comment3.target=int\ estado()
+comment3.text=\r\n\ Devuelve\ la\ opcion\ respectiva\ a\ si\ es\ agregar\ o\ actualizar\ usuarios\r\n
+comment4.params=opciones
+comment4.target=void\ modificarCB(int[])
+comment4.text=\r\n\ Modifica\ la\ seleccion\ de\ los\ combo\ box\r\n
+comment5.params=
+comment5.target=void\ limpiarCampos()
+comment5.text=\r\n\ Limpia\ campos\r\n
+numComments=6

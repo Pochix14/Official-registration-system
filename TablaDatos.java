@@ -26,7 +26,7 @@ public class TablaDatos
         //Barra de menu
         menu = new JMenuBar();
         opciones = new JMenu("Opciones");
-        guardar = new JMenuItem("Guardar");
+        guardar = new JMenuItem("Enviar por correo");
         imprimir = new JMenuItem("Imprimir");
         opciones.add(guardar);
         opciones.add(imprimir);

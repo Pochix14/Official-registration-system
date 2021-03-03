@@ -19,6 +19,7 @@ public class Controlador implements ActionListener, DocumentListener
     private TablaDatos tabla;
     private PDF pdf;
     private Print print;
+    private Usuario user;
     
     private int contador,numeroCaracteres; //Contador para saber cuantos campos de busqueda se activaron y numeroCaracteres para contar caracteres de registro de marca
 
@@ -33,12 +34,19 @@ public class Controlador implements ActionListener, DocumentListener
         correo = new Mail();
         pdf = new PDF();
         print = new Print();
+        user = new Usuario(this);
         
         contador = 0;
         numeroCaracteres = 0;
         
         interfaz.activarListener(this);
         interfaz.visible(true);
+    }
+    
+    //Prueba para consultar, hacer pequeno form para editar, agregar y eliminar funcionario
+    public void test (String funcionario)
+    {
+        baseDatos.consultarF(funcionario);
     }
     
     /**
@@ -128,12 +136,10 @@ public class Controlador implements ActionListener, DocumentListener
             Date entradaRegistrada;
             Date entradaOficial;
             //Determina si la hora es 12MD para asignar correctamente en la entrada
-            System.out.println(horaEntrada);
             if (horaEntrada.contains("PM"))
             {
                 String hora = horaEntrada.substring(0, horaEntrada.indexOf(":")); //Obtiene la hora
                 horaEntrada = horaEntrada.substring(2, horaEntrada.length());
-                System.out.println(horaEntrada);
                 //Si la hora es PM, la cambia a formato militar
                 switch (hora)
                 {
@@ -182,9 +188,8 @@ public class Controlador implements ActionListener, DocumentListener
                     break;
                 }
                 horaEntrada = hora + horaEntrada;
-                System.out.println(horaEntrada);
                 //Si son las 12 MD cambiar el formato
-                if (hora == "12")
+                if (hora.contains("12"))
                 {
                     entradaRegistrada = formato2.parse(horaEntrada); //Si contiene las 12
                     entradaOficial = formato2.parse(horaOficial);
@@ -200,8 +205,6 @@ public class Controlador implements ActionListener, DocumentListener
                 entradaRegistrada = formato.parse(horaEntrada);
                 entradaOficial = formato.parse(horaOficial);
             }
-            System.out.println(entradaRegistrada);
-            System.out.println(entradaOficial);
             //Diferencia entre las horas
             long dif = entradaRegistrada.getTime() - entradaOficial.getTime();
             //Sacar los minutos de diferencia
@@ -241,7 +244,7 @@ public class Controlador implements ActionListener, DocumentListener
             if (horas[0].contains("PM"))
             {
                 String hora = horas[0].substring(0, horas[0].indexOf(":")); //Obtiene la hora
-                if (hora == "12")
+                if (hora.contains("12"))
                 {
                     entrada = formato2.parse(horas[0]); //Si contiene las 12
                 }
@@ -258,7 +261,7 @@ public class Controlador implements ActionListener, DocumentListener
             if (horas[1].contains("PM"))
             {
                 String hora = horas[1].substring(0, horas[1].indexOf(":")); //Obtiene la hora
-                if (hora == "12")
+                if (hora.contains("12"))
                 {
                     salida = formato2.parse(horas[1]); //Si contiene las 12
                 }
@@ -311,7 +314,7 @@ public class Controlador implements ActionListener, DocumentListener
     public void actionPerformed (ActionEvent evento)
     {
         //Botones de imprimir y guardar
-        if (evento.getActionCommand().equals("Guardar"))
+        if (evento.getActionCommand().equals("Enviar por correo"))
         {
             pdf.crearReporte(tabla.tablaConsulta()); //Obtiene tabla con datos y envia para generar PDF
             boolean r = correo.enviarMail(iSimple.pedirCorreo()); //Envia correo con reporte en PDF
@@ -348,6 +351,167 @@ public class Controlador implements ActionListener, DocumentListener
         if (evento.getActionCommand().equals("Ayuda Reporte"))
         {
             iSimple.instReporte();
+        }
+        
+        if (evento.getActionCommand().equals("Agregar Usuario"))
+        {
+            user.opcion = 10;
+            user.visible(true);
+        }
+        
+        if (evento.getActionCommand().equals("Editar Usuario"))
+        {
+            user.opcion = 0;
+            String [] datos = baseDatos.consultarF(iSimple.pedirCedula());
+            user.nombre.setText(datos[2]);
+            user.cedula.setText(datos[0]);
+            int [] op = new int [2];
+            switch (datos[3])
+            {
+                case "Asesoria Juridica":
+                        op[0] = 0;
+                break;
+                
+                case "Proveeduria":
+                        op[0] = 1;
+                break;
+                
+                case "Prensa":
+                        op[0] = 2;
+                break;
+                
+                case "Financiero Contable":
+                        op[0] = 3;
+                break;
+                
+                case "Contraloria de Servicios":
+                        op[0] = 4;
+                break;
+                
+                case "Direccion Ejecutiva":
+                        op[0] = 5;
+                break;
+                
+                case "Direccion Administrativa Financiera":
+                        op[0] = 6;
+                break;
+                
+                case "Recursos Humanos":
+                        op[0] = 7;
+                break;
+                
+                case "Servicios Generales":
+                        op[0] = 8;
+                break;
+                
+                case "Planificacion y Evaluacion":
+                        op[0] = 9;
+                break;
+                
+                case "Cooperacion y Proyectos":
+                        op[0] = 10;
+                break;
+                
+                case "Informacion y Regularizacion Territorial":
+                        op[0] = 11;
+                break;
+                
+                case "CUSBSE":
+                        op[0] = 12;
+                break;
+                
+                case "Tecnologia de Informacion":
+                        op[0] = 13;
+                break;
+                
+                case "Prevencion, Proteccion y Control":
+                        op[0] = 14;
+                break;
+                
+                case "Infraestructura":
+                        op[0] = 15;
+                break;
+                
+                case "Control Interno":
+                        op[0] = 16;
+                break;
+            }
+            
+            switch (datos[4])
+            {
+                case "SE":
+                        op[1] = 0; 
+                break;
+                
+                case "ACC":
+                        op[1] = 1;
+                break;
+                
+                case "ACOPAC":
+                        op[1] = 2;
+                break;
+                
+                case "ACMC":
+                        op[1] = 3;
+                break;
+                
+                case "ACAT":
+                        op[1] = 4;
+                break;
+                
+                case "ACAHN":
+                        op[1] = 5;
+                break;
+                
+                case "ACLAP":
+                        op[1] = 6;
+                break;
+                
+                case "ACLAC":
+                        op[1] = 7;
+                break;
+                
+                case "ACT":
+                        op[1] = 8;
+                break;
+                
+                case "ACG":
+                        op[1] = 9;
+                break;
+                
+                case "ACTo":
+                        op[1] = 10;
+                break;
+            }
+            user.modificarCB(op);//Envia las opciones de DEP y AC para que las ponga en los comboBox
+            user.horaEntrada.setText(datos[5]);
+            user.visible(true);
+        }
+        
+        if (evento.getActionCommand().equals("Eliminar Usuario"))
+        {
+
+        }        
+        
+        //Guardar de la clases Usuarios
+        if (evento.getSource() == user.guardar) 
+        {
+            if (user.estado() == 10) //Si es agregar
+            {
+                String consulta = "INSERT INTO funcionario (nombre, cedula, departamento, ac, entradaOficial) VALUES ('" + user.nombre.getText() + "', '" + user.cedula.getText() + "', '" + user.departamento.getSelectedItem().toString() + "', '" + user.ac.getSelectedItem().toString() + "', '" + user.horaEntrada.getText() + "');";
+                baseDatos.query(consulta, 20); //Se envia el 20 para decirle que es un insert
+                iSimple.usuario(1); //1 para decirle que es agregar
+                user.limpiarCampos();
+                user.visible(false);
+            }
+            else //En caso de que no sea 10, es actualizar
+            {
+                String consulta = "UPDATE funcionario SET nombre = '" + user.nombre.getText() + "', cedula = '" + user.cedula.getText() + "', departamento = '" + user.departamento.getSelectedItem().toString() + "', ac = '" + user.ac.getSelectedItem().toString() + "', entradaOficial = '" + user.horaEntrada.getText() + "' WHERE cedula = '" + user.cedula.getText() + "';";
+                baseDatos.query(consulta, 10); //Se envia 10 para decirle que es un UPDATE
+                iSimple.usuario(2); //2 para decir que es update
+                user.limpiarCampos();
+                user.visible(false);
+            }
         }
         
         //Acciones de los checkbox        
@@ -465,6 +629,7 @@ public class Controlador implements ActionListener, DocumentListener
             {
                 interfaz.reporteCompleto.setEnabled(true);
                 interfaz.reporteCompleto.requestFocusInWindow();
+                contador = 0;
                 if (interfaz.nombre.isSelected())
                 {
                     interfaz.funcionario.setText("");
@@ -511,24 +676,24 @@ public class Controlador implements ActionListener, DocumentListener
             String finalConsulta = " order by id;";
             int ands = contador - 1;
             String and = " AND ";
+            boolean primero = true;
+            
             //Validar cada campo de datos
             if (interfaz.funcionario.isEnabled())
             {
                 if (interfaz.funcionario.getText().length() > 0)
                 {
                     String name = "funcionario.nombre = '" + interfaz.funcionario.getText() + "'";
-                    if (ands == contador-1 || ands == 0)
+                    if (ands > 0 && !primero)
                     {
-                        consulta = consulta + name;
+                        consulta = consulta + and + name;
+                        --ands;
                     }
                     else
                     {
-                        if (ands > 0)
-                        {
-                            consulta = consulta + and + name;
-                            --ands;
-                        }                        
-                    }
+                        consulta = consulta + name;
+                        primero = false;
+                    }  
                 }
             }
             
@@ -537,53 +702,47 @@ public class Controlador implements ActionListener, DocumentListener
                 if (interfaz.ced.getText().length() > 0)
                 {
                     String cedula = "funcionario.cedula = '" + interfaz.ced.getText() + "'";
-                    if (ands == contador-1 || ands == 0)
+                    if (ands > 0 && !primero)
                     {
-                        consulta = consulta + cedula;
+                        consulta = consulta + and + cedula;
+                        --ands;
                     }
                     else
                     {
-                        if (ands > 0)
-                        {
-                            consulta = consulta + and + cedula;
-                            --ands;
-                        }                        
-                    }
+                        consulta = consulta + cedula;
+                        primero = false;
+                    }                    
                 }
             }
             
             if (interfaz.dep.isEnabled())
             {
                 String dep = "funcionario.departamento = '" + interfaz.dep.getSelectedItem().toString() + "'";
-                if (ands == contador - 1 || ands == 0)
+                if (ands > 0 && !primero)
                 {
-                    consulta = consulta + dep;
+                    consulta = consulta + and + dep;
+                    --ands;
                 }
                 else
                 {
-                    if (ands > 0)
-                    {                        
-                        consulta = consulta + and + dep;
-                        --ands;
-                    }
-                }
+                    consulta = consulta + dep;
+                    primero = false;
+                }  
             }
             
             if (interfaz.ac.isEnabled())
             {
                 String ac = "funcionario.ac = '" + interfaz.ac.getSelectedItem().toString() + "'";
-                if (ands == contador - 1 || ands == 0)
+                if (ands > 0 && !primero)
                 {
-                    consulta = consulta + ac;
+                    consulta = consulta + and + ac;
+                    --ands;
                 }
                 else
                 {
-                    if (ands > 0)
-                    {
-                         consulta = consulta + and + ac;
-                         --ands;
-                    }                   
-                }
+                    consulta = consulta + ac;
+                    primero = false;
+                } 
             }
             
             if (interfaz.fechaReporte.isEnabled())
@@ -591,18 +750,16 @@ public class Controlador implements ActionListener, DocumentListener
                 SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
                 String fecha = formato.format(interfaz.fechaReporte.getDate());
                 String fr = "horas.dia = '" + fecha + "'";
-                if (ands == contador - 1 || ands == 0)
-                {
-                    consulta = consulta + fr;
-                }
-                else
-                {
-                    if (ands > 0)
+                if (ands > 0 && !primero)
                     {
-                         consulta = consulta + and + fr;
-                         --ands;
-                    }                   
-                }
+                        consulta = consulta + and + fr;
+                        --ands;
+                    }
+                    else
+                    {
+                        consulta = consulta + fr;
+                        primero = false;
+                    }  
             }
             
             if (interfaz.fechaRangoInicio.isEnabled() && interfaz.fechaRangoFin.isEnabled())
@@ -683,18 +840,16 @@ public class Controlador implements ActionListener, DocumentListener
                             ++diaI;
                         }
                     }
-                    if (ands == contador - 1 || ands == 0)
+                    if (ands > 0 && !primero)
                     {
-                        consulta = consulta + rg;
+                        consulta = consulta + and + rg;
+                        --ands;
                     }
                     else
                     {
-                        if (ands > 0)
-                        {
-                            consulta = consulta + and + rg;
-                            --ands;
-                        }                   
-                    }
+                        consulta = consulta + rg;
+                        primero = false;
+                    } 
                 }
                 catch (Exception e)
                 {
@@ -705,6 +860,7 @@ public class Controlador implements ActionListener, DocumentListener
             //Construccion de consulta final
             consulta = consulta + finalConsulta;
             this.enviarConsulta(consulta);
+            contador = 0;
             interfaz.limpiarCampos();
         }
         
@@ -719,7 +875,7 @@ public class Controlador implements ActionListener, DocumentListener
     }
     
     /**
-     * Crear parametros para consulta al SQL
+     * Crear parametros para consulta de reporte al SQL
      */
     public void enviarConsulta (String consulta)
     {
