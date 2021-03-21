@@ -368,78 +368,86 @@ public class Controlador implements ActionListener, DocumentListener
             int [] op = new int [2];
             switch (datos[3])
             {
-                case "Asesoria Juridica":
+                case "Asesoría Jurídica":
                         op[0] = 0;
                 break;
                 
-                case "Proveeduria":
+                case "Auditoria Interna":
                         op[0] = 1;
                 break;
                 
-                case "Prensa":
+                case "Control Interno":
                         op[0] = 2;
                 break;
                 
-                case "Financiero Contable":
+                case "Cooperación Técnica y Financiera":
                         op[0] = 3;
                 break;
                 
-                case "Contraloria de Servicios":
+                case "CUSBSE":
                         op[0] = 4;
                 break;
                 
-                case "Direccion Ejecutiva":
+                case "Dirección Administrativa Financiera":
                         op[0] = 5;
                 break;
                 
-                case "Direccion Administrativa Financiera":
+                case "Dirección Ejecutiva":
                         op[0] = 6;
                 break;
                 
-                case "Recursos Humanos":
+                case "Dirección Técnica":
                         op[0] = 7;
                 break;
                 
-                case "Servicios Generales":
+                case "Financiero Contable":
                         op[0] = 8;
                 break;
                 
-                case "Planificacion y Evaluacion":
+                case "Información y Regularización Territorial":
                         op[0] = 9;
                 break;
                 
-                case "Cooperacion y Proyectos":
+                case "Infraestructura":
                         op[0] = 10;
                 break;
                 
-                case "Informacion y Regularizacion Territorial":
+                case "Participación Ciudadana y Gobernanza":
                         op[0] = 11;
                 break;
                 
-                case "CUSBSE":
+                case "Planificación y Evaluación":
                         op[0] = 12;
                 break;
                 
-                case "Tecnologia de Informacion":
+                case "Prensa y Comunicación":
                         op[0] = 13;
                 break;
                 
-                case "Prevencion, Proteccion y Control":
+                case "Prevención, Protección y Control":
                         op[0] = 14;
                 break;
                 
-                case "Infraestructura":
+                case "Proveeduría Institucional":
                         op[0] = 15;
                 break;
                 
-                case "Control Interno":
+                case "Recursos Humanos":
                         op[0] = 16;
+                break;
+                
+                case "Servicios Generales":
+                        op[0] = 17;
+                break;
+                
+                case "Tecnologías de Información":
+                        op[0] = 18;
                 break;
             }
             
             switch (datos[4])
             {
-                case "SE":
+                case "Sec Eje":
                         op[1] = 0; 
                 break;
                 
@@ -672,85 +680,87 @@ public class Controlador implements ActionListener, DocumentListener
         //Acciones de los botones de reportes
         if (evento.getSource() == interfaz.crearReporte) //Crea el reporte deseado, validando los campos que tengan informacion y creando la consulta
         {
-            String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoLaborado, tiempoExtra, tardia from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
-            String finalConsulta = " order by id;";
-            int ands = contador - 1;
-            String and = " AND ";
-            boolean primero = true;
-            
-            //Validar cada campo de datos
-            if (interfaz.funcionario.isEnabled())
+            if (interfaz.verificarCampos(iSimple))
             {
-                if (interfaz.funcionario.getText().length() > 0)
+                String consulta = "select horas.id, nombre, cedula, ac, departamento, dia, entrada, salida, tiempoLaborado, tiempoExtra, tardia from funcionario inner join horas on funcionario.cedula = horas.funcionario where ";
+                String finalConsulta = " order by id;";
+                int ands = contador - 1;
+                String and = " AND ";
+                boolean primero = true;
+            
+                //Validar cada campo de datos
+                if (interfaz.funcionario.isEnabled())
                 {
-                    String name = "funcionario.nombre = '" + interfaz.funcionario.getText() + "'";
+                    if (interfaz.funcionario.getText().length() > 0)
+                    {
+                        String name = "funcionario.nombre = '" + interfaz.funcionario.getText() + "'";
+                        if (ands > 0 && !primero)
+                        {
+                            consulta = consulta + and + name;
+                            --ands;
+                        }
+                        else
+                        {
+                            consulta = consulta + name;
+                            primero = false;
+                        }  
+                    }
+                }
+            
+                if (interfaz.ced.isEnabled())
+                {
+                    if (interfaz.ced.getText().length() > 0)
+                    {
+                        String cedula = "funcionario.cedula = '" + interfaz.ced.getText() + "'";
+                        if (ands > 0 && !primero)
+                        {
+                            consulta = consulta + and + cedula;
+                            --ands;
+                        }
+                        else
+                        {
+                            consulta = consulta + cedula;
+                            primero = false;
+                        }                    
+                    }
+                }
+            
+                if (interfaz.dep.isEnabled())
+                {
+                    String dep = "funcionario.departamento = '" + interfaz.dep.getSelectedItem().toString() + "'";
                     if (ands > 0 && !primero)
                     {
-                        consulta = consulta + and + name;
+                        consulta = consulta + and + dep;
                         --ands;
                     }
                     else
                     {
-                        consulta = consulta + name;
+                        consulta = consulta + dep;
                         primero = false;
                     }  
                 }
-            }
             
-            if (interfaz.ced.isEnabled())
-            {
-                if (interfaz.ced.getText().length() > 0)
+                if (interfaz.ac.isEnabled())
                 {
-                    String cedula = "funcionario.cedula = '" + interfaz.ced.getText() + "'";
+                    String ac = "funcionario.ac = '" + interfaz.ac.getSelectedItem().toString() + "'";
                     if (ands > 0 && !primero)
                     {
-                        consulta = consulta + and + cedula;
+                        consulta = consulta + and + ac;
                         --ands;
                     }
                     else
                     {
-                        consulta = consulta + cedula;
+                        consulta = consulta + ac;
                         primero = false;
-                    }                    
+                    } 
                 }
-            }
             
-            if (interfaz.dep.isEnabled())
-            {
-                String dep = "funcionario.departamento = '" + interfaz.dep.getSelectedItem().toString() + "'";
-                if (ands > 0 && !primero)
+                if (interfaz.fechaReporte.isEnabled())
                 {
-                    consulta = consulta + and + dep;
-                    --ands;
-                }
-                else
-                {
-                    consulta = consulta + dep;
-                    primero = false;
-                }  
-            }
-            
-            if (interfaz.ac.isEnabled())
-            {
-                String ac = "funcionario.ac = '" + interfaz.ac.getSelectedItem().toString() + "'";
-                if (ands > 0 && !primero)
-                {
-                    consulta = consulta + and + ac;
-                    --ands;
-                }
-                else
-                {
-                    consulta = consulta + ac;
-                    primero = false;
-                } 
-            }
-            
-            if (interfaz.fechaReporte.isEnabled())
-            {
-                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                String fecha = formato.format(interfaz.fechaReporte.getDate());
-                String fr = "horas.dia = '" + fecha + "'";
-                if (ands > 0 && !primero)
+                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                    String fecha = formato.format(interfaz.fechaReporte.getDate());
+                    String fr = "horas.dia = '" + fecha + "'";
+                    if (ands > 0 && !primero)
                     {
                         consulta = consulta + and + fr;
                         --ands;
@@ -760,108 +770,109 @@ public class Controlador implements ActionListener, DocumentListener
                         consulta = consulta + fr;
                         primero = false;
                     }  
-            }
+                }
             
-            if (interfaz.fechaRangoInicio.isEnabled() && interfaz.fechaRangoFin.isEnabled())
-            {
-                try
+                if (interfaz.fechaRangoInicio.isEnabled() && interfaz.fechaRangoFin.isEnabled())
                 {
-                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                    String fi = formato.format(interfaz.fechaRangoInicio.getDate());
-                    String ff = formato.format(interfaz.fechaRangoFin.getDate());
-                    Date inicio = formato.parse(fi);
-                    Date fin = formato.parse(ff);
-                    //Obtiene dias entre rango de fecha
-                    int dias = (int) ((fin.getTime() - inicio.getTime()) / 86400000);
-                    String [] f = fi.split("/"); //Separa fecha inicial por los /
-                    String [] r = ff.split("/"); //Separa fecha final por los /
-                    
-                    //Primera linea de la consulta
-                    String rg = "horas.dia = '" + fi + "'";
-                    //Asignar dia, mes y ano inicial a int
-                    int diaI = Integer.parseInt(f[0]);
-                    ++diaI;
-                    int mesI = Integer.parseInt(f[1]);
-                    int anoI = Integer.parseInt(f[2]);
-                    //Asignar dia, mes y ano final a int
-                    int diaF = Integer.parseInt(r[0]);
-                    int mesF = Integer.parseInt(r[1]);
-                    int anoF = Integer.parseInt(r[2]);
-                    for (int i = dias; i > 0; --i)
+                    try
                     {
-                        String in = Integer.toString(diaI) + "/" + Integer.toString(mesI) + "/" + Integer.toString(anoI);
-                        String fn = Integer.toString(diaF+1) + "/" + Integer.toString(mesF) + "/" + Integer.toString(anoF);
-                        if (in != fn)
-                        {                         
-                            //Para cambio de mes Febrero
-                            if (mesI == 2 && diaI == 29)
-                            {
-                                ++mesI;
-                                diaI = 1;
-                            }
-                            else
-                            {
-                                //Para cambio de mes con 30 dias
-                                if (mesI == 4 || mesI==6 || mesI== 9 || mesI==11)
-                                {                                   
-                                    if (diaI == 31)
-                                    {
-                                        ++mesI ;
-                                        diaI = 1;
-                                    }
+                        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                        String fi = formato.format(interfaz.fechaRangoInicio.getDate());
+                        String ff = formato.format(interfaz.fechaRangoFin.getDate());
+                        Date inicio = formato.parse(fi);
+                        Date fin = formato.parse(ff);
+                        //Obtiene dias entre rango de fecha
+                        int dias = (int) ((fin.getTime() - inicio.getTime()) / 86400000);
+                        String [] f = fi.split("/"); //Separa fecha inicial por los /
+                        String [] r = ff.split("/"); //Separa fecha final por los /
+                    
+                        //Primera linea de la consulta
+                        String rg = "horas.dia = '" + fi + "'";
+                        //Asignar dia, mes y ano inicial a int
+                        int diaI = Integer.parseInt(f[0]);
+                        ++diaI;
+                        int mesI = Integer.parseInt(f[1]);
+                        int anoI = Integer.parseInt(f[2]);
+                        //Asignar dia, mes y ano final a int
+                        int diaF = Integer.parseInt(r[0]);
+                        int mesF = Integer.parseInt(r[1]);
+                        int anoF = Integer.parseInt(r[2]);
+                        for (int i = dias; i > 0; --i)
+                        {
+                            String in = Integer.toString(diaI) + "/" + Integer.toString(mesI) + "/" + Integer.toString(anoI);
+                            String fn = Integer.toString(diaF+1) + "/" + Integer.toString(mesF) + "/" + Integer.toString(anoF);
+                            if (in != fn)
+                            {                         
+                                //Para cambio de mes Febrero
+                                if (mesI == 2 && diaI == 29)
+                                {
+                                    ++mesI;
+                                    diaI = 1;
                                 }
                                 else
                                 {
-                                    //Para cambio de mes con 31 dias
-                                    if (mesI == 1 || mesI == 3 || mesI== 5 || mesI== 7 || mesI == 8 || mesI == 10 || mesI ==12)
-                                    {
-                                        if (diaI == 32)
+                                    //Para cambio de mes con 30 dias
+                                    if (mesI == 4 || mesI==6 || mesI== 9 || mesI==11)
+                                    {                                   
+                                        if (diaI == 31)
                                         {
-                                           ++mesI;
-                                           if (mesI == 13)
-                                           {
-                                               mesI = 1;
-                                               ++anoI;
-                                            }
-                                            diaI = 1; 
-                                        }                                        
+                                            ++mesI ;
+                                            diaI = 1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Para cambio de mes con 31 dias
+                                        if (mesI == 1 || mesI == 3 || mesI== 5 || mesI== 7 || mesI == 8 || mesI == 10 || mesI ==12)
+                                        {
+                                            if (diaI == 32)
+                                            {
+                                                ++mesI;
+                                                if (mesI == 13)
+                                                {
+                                                    mesI = 1;
+                                                    ++anoI;
+                                                }
+                                                diaI = 1; 
+                                            }                                        
+                                        }
                                     }
                                 }
+                                //Si mes es menor de 10, pone 0 adelante
+                                if (mesI < 10)
+                                {
+                                    rg = rg + " or horas.dia = '" + diaI + "/0" + mesI + "/" + anoI + "'";
+                                }
+                                else
+                                {
+                                    rg = rg + " or horas.dia = '" + diaI + "/" + mesI + "/" + anoI + "'";
+                                }
+                                ++diaI;
                             }
-                            //Si mes es menor de 10, pone 0 adelante
-                            if (mesI < 10)
-                            {
-                                rg = rg + " or horas.dia = '" + diaI + "/0" + mesI + "/" + anoI + "'";
-                            }
-                            else
-                            {
-                                rg = rg + " or horas.dia = '" + diaI + "/" + mesI + "/" + anoI + "'";
-                            }
-                            ++diaI;
                         }
+                        if (ands > 0 && !primero)
+                        {
+                            consulta = consulta + and + rg;
+                            --ands;
+                        }
+                        else
+                        {
+                            consulta = consulta + rg;
+                            primero = false;
+                        } 
                     }
-                    if (ands > 0 && !primero)
+                    catch (Exception e)
                     {
-                        consulta = consulta + and + rg;
-                        --ands;
+                        e.printStackTrace();
                     }
-                    else
-                    {
-                        consulta = consulta + rg;
-                        primero = false;
-                    } 
                 }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
             
-            //Construccion de consulta final
-            consulta = consulta + finalConsulta;
-            this.enviarConsulta(consulta);
-            contador = 0;
-            interfaz.limpiarCampos();
+                //Construccion de consulta final
+                consulta = consulta + finalConsulta;
+                this.enviarConsulta(consulta);
+                contador = 0;
+                interfaz.limpiarCampos();
+            }           
         }
         
         if (evento.getSource() == interfaz.reporteCompleto) //Genera reporte completo 

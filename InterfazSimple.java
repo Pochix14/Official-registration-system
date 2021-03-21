@@ -69,7 +69,10 @@ public class InterfazSimple extends JOptionPane
      */
     public void instReporte ()
     {
-        
+        String i = "1- Seleccione una o varias casillas para personalizar el reporte o bien, seleccione reporte completo.\n";
+        String ii = "2- Llene los datos correspondientes a la(s) casilla(s) que selecciono.\n";
+        String iii = "3- Una vez lleno los datos, presione el boton de 'Crear Reporte'.\n\n ";
+        this.showMessageDialog(null, i+ii+iii, "Instruciones Reporte", this.INFORMATION_MESSAGE);
     }
     
     /**
@@ -77,7 +80,7 @@ public class InterfazSimple extends JOptionPane
      */    
     public void creditos()
     {
-        String mensaje = "Autor: Pablo Rodríguez Navarro\nVersión: 20.11.2020\n©® Derechos Reservados ©®";
+        String mensaje = "Autor: Pablo Rodríguez Navarro\nVersión: 1.5.0\n©® Derechos Reservados ©®";
         this.showMessageDialog(null, mensaje, "Desarrollado por", this.INFORMATION_MESSAGE);
     }
     
@@ -171,7 +174,7 @@ public class InterfazSimple extends JOptionPane
                 {
                     dialogo.dispose();
                 }
-            }, 3000); //Cierre automatico en 3 segundos
+            }, 2500); //Cierre automatico en 3 segundos
         
         dialogo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialogo.setAlwaysOnTop(true);
@@ -210,7 +213,7 @@ public class InterfazSimple extends JOptionPane
                 {
                     dialogo.dispose();
                 }
-            }, 3000); //Cierre automatico en 3 segundos
+            }, 2000); //Cierre automatico en 3 segundos
         
         dialogo.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialogo.setAlwaysOnTop(true);
@@ -241,5 +244,13 @@ public class InterfazSimple extends JOptionPane
         dialogo.setAlwaysOnTop(true);
         dialogo.setModal(false);
         dialogo.setVisible(true);
+    }
+    
+    /**
+     * Mensaje de error al estar algun campo incorrecto para informe
+     */
+    public void errorReporte (String mensaje)
+    {
+        this.showMessageDialog(null, mensaje, "ERROR!", this.ERROR_MESSAGE);
     }
 }

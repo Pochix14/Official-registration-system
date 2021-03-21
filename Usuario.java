@@ -68,26 +68,27 @@ public class Usuario extends JFrame
         
         //ComboBox
         departamento = new JComboBox();
-        departamento.addItem("Asesoria Juridica");
-        departamento.addItem("Proveeduria");
-        departamento.addItem("Prensa");
+        departamento.addItem("Asesoría Jurídica");
+        departamento.addItem("Auditoria Interna");
+        departamento.addItem("Control Interno");
+        departamento.addItem("Cooperación Técnica y Financiera");
+        departamento.addItem("CUSBSE");
+        departamento.addItem("Dirección Administrativa Financiera");
+        departamento.addItem("Dirección Ejecutiva");
+        departamento.addItem("Dirección Técnica");
         departamento.addItem("Financiero Contable");
-        departamento.addItem("Contraloria de Servicios");
-        departamento.addItem("Direccion Ejecutiva");
-        departamento.addItem("Direccion Administrativa Financiera");
+        departamento.addItem("Información y Regularización Territorial");
+        departamento.addItem("Infraestructura");
+        departamento.addItem("Participación Ciudadana y Gobernanza");
+        departamento.addItem("Planificación y Evaluación");
+        departamento.addItem("Prensa y Comunicación");
+        departamento.addItem("Prevención, Protección y Control");
+        departamento.addItem("Proveeduría Institucional");
         departamento.addItem("Recursos Humanos");
         departamento.addItem("Servicios Generales");
-        departamento.addItem("Planificacion y Evaluacion");
-        departamento.addItem("Cooperacion y Proyectos");
-        departamento.addItem("Informacion y Regularizacion Territorial");
-        departamento.addItem("CUSBSE");
-        departamento.addItem("Tecnologia de Informacion");
-        departamento.addItem("Auditoria Interna");
-        departamento.addItem("Prevencion, Proteccion y Control");
-        departamento.addItem("Infraestructura");
-        departamento.addItem("Control Interno"); 
+        departamento.addItem("Tecnologías de Información");
         ac = new JComboBox();
-        ac.addItem("SE");
+        ac.addItem("Sec Eje");
         ac.addItem("ACC");
         ac.addItem("ACOPAC");
         ac.addItem("ACMC");
@@ -112,7 +113,7 @@ public class Usuario extends JFrame
         this.setSize(500, 500);
         this.setMinimumSize(new Dimension(500, 500));
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setResizable(false);
     }
     
@@ -187,7 +188,11 @@ public class Usuario extends JFrame
      */
     public void limpiarCampos ()
     {
-        
+        nombre.setText("");
+        cedula.setText("");
+        horaEntrada.setText("");
+        departamento.setSelectedIndex(0);
+        ac.setSelectedIndex(0);
     }
 }
 

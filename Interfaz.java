@@ -184,29 +184,30 @@ public class Interfaz extends JFrame
         etqDep = new JLabel("Departamento: ");
         //Lista de departamentos
         dep = new JComboBox();
-        dep.addItem("Asesoria Juridica");
-        dep.addItem("Proveeduria");
-        dep.addItem("Prensa");
+        dep.addItem("Asesoría Jurídica");
+        dep.addItem("Auditoria Interna");
+        dep.addItem("Control Interno");
+        dep.addItem("Cooperación Técnica y Financiera");
+        dep.addItem("CUSBSE");
+        dep.addItem("Dirección Administrativa Financiera");
+        dep.addItem("Dirección Ejecutiva");
+        dep.addItem("Dirección Técnica");
         dep.addItem("Financiero Contable");
-        dep.addItem("Contraloria de Servicios");
-        dep.addItem("Direccion Ejecutiva");
-        dep.addItem("Direccion Administrativa Financiera");
+        dep.addItem("Información y Regularización Territorial");
+        dep.addItem("Infraestructura");
+        dep.addItem("Participación Ciudadana y Gobernanza");
+        dep.addItem("Planificación y Evaluación");
+        dep.addItem("Prensa y Comunicación");
+        dep.addItem("Prevención, Protección y Control");
+        dep.addItem("Proveeduría Institucional");
         dep.addItem("Recursos Humanos");
         dep.addItem("Servicios Generales");
-        dep.addItem("Planificacion y Evaluacion");
-        dep.addItem("Cooperacion y Proyectos");
-        dep.addItem("Informacion y Regularizacion Territorial");
-        dep.addItem("CUSBSE");
-        dep.addItem("Tecnologia de Informacion");
-        dep.addItem("Auditoria Interna");
-        dep.addItem("Prevencion, Proteccion y Control");
-        dep.addItem("Infraestructura");
-        dep.addItem("Control Interno");   
+        dep.addItem("Tecnologías de Información");
         dep.setEnabled(false);
         etqAC = new JLabel("Area Conservacion: ");
         //Lista de AC's
         ac = new JComboBox();
-        ac.addItem("SE");
+        ac.addItem("Sec Eje");
         ac.addItem("ACC");
         ac.addItem("ACOPAC");
         ac.addItem("ACMC");
@@ -360,4 +361,89 @@ public class Interfaz extends JFrame
         //Boton de reporte
         crearReporte.setEnabled(false);
     }
+    
+    /**
+     * Verifica campos para crear reporte o generar error
+     */
+    public boolean verificarCampos (InterfazSimple is)
+    {
+        boolean resultadoFinal = false; 
+        
+        boolean resultado1 = false;
+        boolean resultado2 = false;
+        boolean resultado3 = false;
+        boolean resultado4 = false;;
+        
+        //Verifica que nombre de funcionario contenga al menos 3 caracteres
+        if (funcionario.isEnabled() && funcionario.getText().length() < 4)
+        {
+            is.errorReporte("Debe ingresar al menos 3 letras");
+            funcionario.setText("");
+            funcionario.requestFocusInWindow();
+            resultado1 = false;
+        }
+        else
+        {
+            resultado1 = true;
+        }
+        
+        //Verifica que la cedula sea solo numeros y de 9 digitos
+        if (ced.isEnabled() && ced.getText().length() != 9)
+        {
+            if (!ced.getText().matches("\\d{9}"))
+            {
+                is.errorReporte("Debe ingresar solo numeros y en formato de 9 digitos");
+                ced.setText("");
+                ced.requestFocusInWindow();
+                resultado2 = false;
+            }
+            else
+            {
+                if (ced.getText().length() != 9)
+                {
+                    is.errorReporte("La cedula debe tener 9 digitos");
+                    ced.setText("");
+                    ced.requestFocusInWindow();
+                    resultado2 = false;
+                }
+            }            
+        }
+        else
+        {
+            resultado2 = true;
+        }
+        
+        //Verifica que la fecha no sea en blanco
+        if (fechaReporte.isEnabled() && fechaReporte.getDate() == null)
+        {
+            Date fecha = new Date();
+            fechaReporte.setDate(fecha);
+            resultado3 = true;
+        }
+        else
+        {
+            resultado3 = true;
+        }
+        
+        //Verifica que rango de fechas no sean en blanco
+        if (fechaRangoInicio.isEnabled() && fechaRangoInicio.getDate() == null || fechaRangoFin.isEnabled() && fechaRangoFin.getDate() == null)
+        {
+            is.errorReporte("Debe seleccionar un rango de fechas!");
+            ((JTextField)fechaRangoInicio.getDateEditor().getUiComponent()).setText("");
+            ((JTextField)fechaRangoFin.getDateEditor().getUiComponent()).setText("");
+            fechaRangoInicio.requestFocusInWindow();
+            resultado4 = false;
+        }
+        else
+        {
+            resultado4 = true;
+        }
+        
+        if (resultado1 && resultado2 && resultado3 && resultado4)
+        {
+            resultadoFinal = true;
+        }
+        
+        return resultadoFinal;
+    }   
 }
