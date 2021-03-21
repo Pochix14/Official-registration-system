@@ -32,10 +32,10 @@ public class Mail
     public Mail()
     {
        //Si es un correo de Gmail, hay que activar la opción de aplicaciones poco seguras
-        usuario = "docs.sinac@gmail.com";
-       password =  "S0port3*";
+        usuario = "YOUR_EMAIL";
+       password =  "YOUR_PASSWORD";
        
-       //Propiedades de servidor
+       //Propiedades de servidor GMail
        Properties props = new Properties();
        props.put("mail.smtp.host", "smtp.gmail.com");
        props.put("mail.smtp.user", usuario);
