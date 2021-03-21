@@ -34,7 +34,7 @@ public class BaseDatos
         try
         {
             DriverManager.registerDriver(new com.microsoft.sqlserver.jdbc.SQLServerDriver()); //Trae libreria de SQL Server
-            String URL = "jdbc:sqlserver://PC-PABLO\\SQLEXPRESS:1433;databaseName=Marcas_Sinac;user=admin;password=Pabloc14$;"; //Ruta para conexion
+            String URL = "jdbc:sqlserver://YOUR_SERVER\\SQLEXPRESS:1433;databaseName=YOUR_DATABASE;user=YOUR_USER;password=YOUR_PASSWORD;"; //Ruta para conexion
             conexion = DriverManager.getConnection(URL); //Abre conexion
             estado = true;
         }
